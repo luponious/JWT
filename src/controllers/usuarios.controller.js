@@ -1,6 +1,6 @@
 import { usuariosService } from '../services/usuarios.service.js'
 
-// registrar
+// Registrar
 export async function postController(req, res, next) {
   try {
     const usuario = await usuariosService.registrar(req.body)
@@ -10,7 +10,7 @@ export async function postController(req, res, next) {
   }
 }
 
-// dar de baja
+// Dar de baja
 export async function deleteController(req, res, next) {
   try {
     await usuariosService.darDeBaja(req.params.id)

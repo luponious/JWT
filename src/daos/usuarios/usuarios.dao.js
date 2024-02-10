@@ -1,15 +1,25 @@
+import { model } from 'mongoose'
 import { MODO_EJECUCION } from '../../config/config.js'
 
-let getDaoUsuarios
+import { UsuariosDaoMongoose } from './mongoose/usuarios.dao.mongoose.js'
+import { UsuariosDaoFiles } from './usuarios.dao.files.js'
+import { usuariosSchema } from './mongoose/usuarios.model.mongoose.js'
+
+const RUTA_USUARIOS_JSON = '../../../db/usuarios.json'
+
+let daoUsuarios
 
 if (MODO_EJECUCION === 'online') {
-  const { getDaoMongoose } = await import('./usuarios.dao.mongoose.js')
-  getDaoUsuarios = getDaoMongoose
+  if (!daoUsuarios) {
+    const usuariosModel = model('usuarios', usuariosSchema)
+    daoUsuarios = new UsuariosDaoMongoose(usuariosModel)
+    console.log('Persistencia usuarios en mongodb')
+  }
 } else {
-  const { getDaoFiles } = await import('./usuarios.dao.files.js')
-  getDaoUsuarios = getDaoFiles
+  daoUsuarios = new UsuariosDaoFiles(RUTA_USUARIOS_JSON)
+  console.log('Persistencia local')
 }
 
-export {
-  getDaoUsuarios
-}
+export function getDaoUsuarios() {
+  return daoUsuarios
+} 

@@ -1,32 +1,6 @@
-import { randomUUID } from 'node:crypto'
 import fs from 'fs/promises'
 import { matches } from '../utils.js'
-
-class Usuario {
-  #_id
-  #nombre
-  constructor({ _id = randomUUID(), nombre }) {
-    this.#_id = _id
-    this.nombre = nombre
-  }
-
-  get _id() { return this.#_id }
-  get nombre() { return this.#nombre }
-
-  set nombre(value) {
-    if (!value) throw new Error('el nombre es obligatorio')
-    this.#nombre = value
-  }
-
-  toObject() {
-    return {
-      _id: this.#_id,
-      nombre: this.#nombre,
-    }
-  }
-}
-
-class UsuariosDaoFiles {
+export class UsuariosDaoFiles {
 
   constructor(path) {
     this.path = path
@@ -40,12 +14,11 @@ class UsuariosDaoFiles {
     await fs.writeFile(this.path, JSON.stringify(usuarios, null, 2))
   }
 
-  async create(data) {
-    const usuario = new Usuario(data)
+  async create(userPojo) {
     const usuarios = await this.#readUsuarios()
-    usuarios.push(usuario.toObject())
+    usuarios.push(userPojo)
     await this.#writeUsuarios(usuarios)
-    return usuario.toObject()
+    return userPojo
   }
 
   async readOne(query) {
@@ -78,15 +51,4 @@ class UsuariosDaoFiles {
     }
     return null
   }
-
-  async deleteMany(query) {
-    throw new Error('NOT IMPLEMENTED')
-  }
-}
-
-const usuariosDaoFiles = new UsuariosDaoFiles('./db/usuarios.json')
-console.log('usando persistencia en sistema de archivos')
-
-export async function getDaoFiles() {
-  return usuariosDaoFiles
 }

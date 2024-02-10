@@ -2,7 +2,7 @@ import { librosService } from '../services/libros.service.js'
 
 export async function getController(req, res, next) {
   try {
-    const libros = await librossService.readMany({})
+    const libros = await librosService.readMany({})
     res.result(libros)
   } catch (error) {
     next(error)
