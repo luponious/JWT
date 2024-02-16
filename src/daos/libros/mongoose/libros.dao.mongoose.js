@@ -1,4 +1,4 @@
-import { toPOJO } from '../../utils.js'
+import { toPOJO } from '../../utils/utils.js'
 
 export class LibrosDaoMongoose {
   constructor(librosModel) {
@@ -19,22 +19,6 @@ export class LibrosDaoMongoose {
     return toPOJO(await this.librosModel.find(query).lean())
   }
 
-
-  async updateOne(query, data) {
-    throw new Error('NOT IMPLEMENTED')
-  }
-
-  async updateMany(query, data) {
-    throw new Error('NOT IMPLEMENTED')
-  }
-
-  async deleteOne(query) {
-    throw new Error('NOT IMPLEMENTED')
-  }
-
-  async deleteMany(query) {
-    throw new Error('NOT IMPLEMENTED')
-  }
 }
 
 let librosDaoMongoose

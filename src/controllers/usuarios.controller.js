@@ -1,4 +1,4 @@
-import { usuariosService } from '../services/usuarios.service.js'
+import { usuariosService } from './../services/usuario.services'
 
 // Registrar
 export async function postController(req, res, next) {

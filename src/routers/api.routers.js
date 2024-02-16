@@ -1,28 +1,33 @@
-import { Router, json, urlencoded } from 'express'
-import { librosRouter } from './libros.router.js'
-import { manejoDeErrores } from '../middlewares/manejoDeErrores.js'
-import { respuestasMejoradas } from '../middlewares/respuestasMejoradas.js'
-import { usuariosRouter } from './usuarios.router.js'
-import { sesionesRouter } from './sesiones.router.js'
-import { tiendasRouter } from './tiendas.router.js'
+import { Router, json, urlencoded } from 'express';
+import { librosRouter } from './libros.router.js';
+import { usuariosRouter } from './usuarios.router.js';
+import { sesionesRouter } from './sesiones.router.js';
+import { tiendasRouter } from './tiendas.router.js';
+import { cartsRouter } from './carts.router.js';
+import { ordersRouter } from './orders.router.js';
+// Add newslettersRouter import a futuro
 
-apiRouter.use(respuestasMejoradas)
+import { manejoDeErrores } from '../middlewares/manejoDeErrores.js';
+import { respuestasMejoradas } from '../middlewares/respuestasMejoradas.js';
 
-apiRouter.use(json())
-apiRouter.use(urlencoded({ extended: true }))
+export const apiRouter = Router();
 
-apiRouter.use('/usuarios', usuariosRouter)
-apiRouter.use('/sesiones', sesionesRouter)
+apiRouter.use(respuestasMejoradas);
+apiRouter.use(json());
+// Parse URL-encoded bodies
+apiRouter.use(urlencoded({ extended: true }));
 
-apiRouter.use('/libros', librosRouter)
-apiRouter.use('/tiendas', tiendasRouter)
+// Register routers for different endpoints
+apiRouter.use('/usuarios', usuariosRouter);
+apiRouter.use('/sesiones', sesionesRouter);
+apiRouter.use('/libros', librosRouter);
+apiRouter.use('/tiendas', tiendasRouter);
+apiRouter.use("/carts", cartsRouter);
+apiRouter.use("/orders", ordersRouter);
+// Handle newslettersRouter if available
 
+// TO-DO: Implement or remove the newslettersRouter
+// apiRouter.use('/newsletters', newslettersRouter);
 
-
-// [TO-DO]
-// apiRouter.use('/newsletters', newslettersRouter)
-// import { newslettersRouter } from './newsletters.router.js'
-
-export const apiRouter = Router()
-
-apiRouter.use(manejoDeErrores)
+// Use error handling middleware
+apiRouter.use(manejoDeErrores);

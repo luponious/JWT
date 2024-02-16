@@ -4,3 +4,4 @@ export function solo(roles) {
     res.sendStatus(403)
   }
 }
+
