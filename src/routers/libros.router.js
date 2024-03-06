@@ -1,11 +1,12 @@
 import { Router } from "express";
 import {
-    deleteLibrosController,    getLibrosController,
-    postLibrosController,    putLibrosController,
+    deleteLibrosController, getLibrosController,
+    postLibrosController, putLibrosController,
 } from "../controllers/libros.controller.js";
 import {
-    validateLibrosData,    validateId,    validateUpdates,
-} from "../middlewares/validation.js";
+    validateLibroData, validateId, validateUpdates, // Correct imports
+} from "../middlewares/validation.js"; // Correct import
+
 import { tieneRol } from "../middlewares/authorization.js";
 import passport from "passport";
 
@@ -24,7 +25,7 @@ librosRouter.post(
     "/",
     authenticateJWT,
     adminAuthorization,
-    validateLibrosData,
+    validateLibroData, // Correct usage
     postLibrosController
 );
 
@@ -33,7 +34,7 @@ librosRouter.put(
     "/:id",
     authenticateJWT,
     adminAuthorization,
-    validateUpdates,
+    validateUpdates, // Correct usage
     putLibrosController
 );
 

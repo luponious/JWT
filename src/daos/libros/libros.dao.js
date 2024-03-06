@@ -6,22 +6,16 @@ import { LibrosDaoMongoose } from './mongoose/libros.dao.mongoose.js'
 import { LibrosDaoFiles } from './libros.dao.files.js'
 import { librosSchema } from './mongoose/libros.model.mongoose.js'
 
-
 const RUTA_userS_JSON = './db/libros.json'
 
-let daoLibros
+const daoLibros = MODO_EJECUCION === 'online'
+  ? new LibrosDaoMongoose(model('libros', librosSchema))
+  : new LibrosDaoFiles(RUTA_userS_JSON);
 
 if (MODO_EJECUCION === 'online') {
-  if (!daoLibros) {
-    const librosModel = model('libros', librosSchema)
-    daoLibros = new LibrosDaoMongoose(librosModel)
-    console.log('Libros de: mongodb')
-  }
+  console.log('Libros de: mongodb');
 } else {
-  daoLibros = new LibrosDaoFiles(RUTA_userS_JSON)
-  console.log('Libros existiendo en: sistema de archivos')
+  console.log('Libros existiendo en: sistema de archivos');
 }
 
-export function getDaoLibros() {
-  return daoLibros
-} 
+export { daoLibros };

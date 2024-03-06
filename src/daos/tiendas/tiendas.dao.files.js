@@ -2,17 +2,25 @@ import fs from 'fs/promises'
 import { matches } from '../utils/utils.js'
 
 export class TiendasDaoFiles {
-
     constructor(path) {
         this.path = path
     }
 
     async #readFile() {
-        return JSON.parse(await fs.readFile(this.path, 'utf-8'))
+        try {
+            const data = await fs.readFile(this.path, 'utf-8')
+            return JSON.parse(data)
+        } catch (error) {
+            // If the file doesn't exist, return an empty array
+            if (error.code === 'ENOENT') {
+                return []
+            }
+            throw error
+        }
     }
 
-    async #writeFile(users) {
-        await fs.writeFile(this.path, JSON.stringify(users, null, 2))
+    async #writeFile(tiendas) {
+        await fs.writeFile(this.path, JSON.stringify(tiendas, null, 2))
     }
 
     async create(tiendaPojo) {
@@ -29,7 +37,9 @@ export class TiendasDaoFiles {
     }
 
     async readMany(query) {
-        throw new Error('NOT IMPLEMENTED')
+        const tiendas = await this.#readFile()
+        const buscados = tiendas.filter(matches(query))
+        return buscados
     }
 
     async updateOne(query, data) {
@@ -52,10 +62,21 @@ export class TiendasDaoFiles {
     }
 
     async deleteOne(query) {
-        throw new Error('NOT IMPLEMENTED')
+        const tiendas = await this.#readFile()
+        const indexBuscado = tiendas.findIndex(matches(query))
+        if (indexBuscado !== -1) {
+            const eliminado = tiendas.splice(indexBuscado, 1)[0]
+            await this.#writeFile(tiendas)
+            return eliminado
+        }
+        return null
     }
 
     async deleteMany(query) {
-        throw new Error('NOT IMPLEMENTED')
+        const tiendas = await this.#readFile()
+        const eliminados = tiendas.filter(matches(query))
+        const actualizados = tiendas.filter(tienda => !matches(query)(tienda))
+        await this.#writeFile(actualizados)
+        return eliminados
     }
 }

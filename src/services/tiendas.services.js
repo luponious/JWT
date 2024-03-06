@@ -1,4 +1,5 @@
-import { Tienda } from '../models/tienda.model'
+import { Tienda } from '../models/tienda.model.js';
+
 
 export class TiendasService {
     constructor({ tiendasDao, librosService }) {

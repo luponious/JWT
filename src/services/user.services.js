@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { errorMan } from '../daos/utils/errorMan';
+import { errorMan } from '../daos/utils/errorMan.js';
 import { validatePremiumUser } from '../middlewares/validation.js';
 
 export class usersService {

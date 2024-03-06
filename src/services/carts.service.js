@@ -1,11 +1,12 @@
 import { daoLibros } from "../daos/libros/libros.dao.js"
-import { daoCarts } from "../daos/carts/carts.dao.files.js"
+import cartManager from "../daos/carts/carts.dao.files.js";
 import { errorMan } from "../daos/utils/errorMan.js";
+
 
 class CartsService {
   async readMany() {
     try {
-      return daoCarts.readMany();
+      return cartManager.readMany(); 
     } catch (error) {
       throw new Error(`Error en CartsService.readMany: ${error}`);
     }
@@ -19,7 +20,7 @@ class CartsService {
         throw error;
       }
 
-      const cart = await daoCarts.readOne(id);
+      const cart = await cartManager.readOne(id); 
       if (!cart) {
         const error = new Error(
           `No se encontró ningún carrito con el ID ${id}`
@@ -35,7 +36,7 @@ class CartsService {
 
   async createOne() {
     try {
-      const createdCart = await daoCarts.createOne({});
+      const createdCart = await cartManager.createOne({}); 
       if (!createdCart) {
         const error = new Error("No se pudo crear el carrito");
         error.code = errorMan.UNEXPECTED_ERROR;
@@ -55,14 +56,14 @@ class CartsService {
         throw error;
       }
 
-      const cart = await daoCarts.readOne(cartId);
+      const cart = await cartManager.readOne(cartId); 
       if (!cart) {
         const error = new Error("Carrito no encontrado");
         error.code = errorMan.NOT_FOUND;
         throw error;
       }
 
-      const libro = await daoLibros.readOne(libroId);
+      const libro = await daoLibros.readOne(libroId); 
       if (!libro) {
         const error = new Error("libro no encontrado.");
         error.code = errorMan.NOT_FOUND;
@@ -75,12 +76,14 @@ class CartsService {
         throw error;
       }
 
-      const updatedCart = await daoCarts.updateOne(cartId, libroId, quantity);
+      const updatedCart = await cartManager.updateOne(cartId, libroId, quantity);
       return updatedCart;
     } catch (error) {
       throw error;
     }
   }
+
+
 
   async deleteLibroFromCart(cartId, libroId) {
     try {
@@ -119,5 +122,6 @@ class CartsService {
     return daoCarts.deleteCart(cartId);
   }
 }
+
 
 export const cartsService = new CartsService();

@@ -1,6 +1,6 @@
-import { getDaoLibros } from '../daos/libros/libros.dao.js'
+import { daoLibros } from '../daos/libros/libros.dao.js'
 
-const librosDao = await getDaoLibros()
+const librosDao = await daoLibros()
 
 class LibrosService {
     async readMany({ limit = 10, page = 1, sort, query }) {
@@ -35,7 +35,7 @@ class LibrosService {
   
         const filter = query ? { category: query } : {};
   
-        return await getDaoLibros.readMany(filter, options);
+        return await daoLibros.readMany(filter, options);
       } catch (error) {
         throw new Error(`Error en librosService.readMany: ${error}`);
       }
@@ -50,7 +50,7 @@ class LibrosService {
         }
   
         console.log("BEFORE DAO READONE");
-        const libro = await getDaoLibros.readOne(id);
+        const libro = await daoLibros.readOne(id);
         if (!libro) {
           const error = new Error(
             `No se encontró un libro con el ID: ${id}`
@@ -74,7 +74,7 @@ class LibrosService {
           throw error;
         }
   
-        const createdlibro = await getDaoLibros.createOne(libro);
+        const createdlibro = await daoLibros.createOne(libro);
         if (!createdlibro) {
           const error = new Error("No se pudo crear el libroo");
           error.code = errorMan.UNEXPECTED_ERROR;
@@ -98,7 +98,7 @@ class LibrosService {
           error.code = errorMan.INCORRECT_DATA;
           throw error;
         }
-        const updatedlibro = await getDaoLibros.updateOne(id, updates);
+        const updatedlibro = await daoLibros.updateOne(id, updates);
         return updatedlibro;
       } catch (error) {
         throw new Error(`Error en librosService.updateOne: ${error}`);
@@ -112,7 +112,7 @@ class LibrosService {
           error.code = errorMan.INCORRECT_DATA;
           throw error;
         }
-        const deletedlibro = await getDaoLibros.deleteOne(id);
+        const deletedlibro = await daoLibros.deleteOne(id);
         return deletedlibro;
       } catch (error) {
         throw error;
