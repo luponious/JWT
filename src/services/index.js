@@ -1,7 +1,7 @@
 import { getDaoTiendas } from '../daos/tiendas/tiendas.dao.js'
-import { librosService } from './libros.service.js'
-import { TiendasService } from './tiendas.service.js'
-import { usersService } from './users.service.js'
+import { librosService } from '../services/libros.services.js'
+import { TiendasService } from '../services/tiendas.services.js'
+import { usersService } from './user.services.js' // Importa la instancia existente
 import { getDaousers } from '../daos/user/users.dao.js'
 import { getDaoLibros } from '../daos/libros/libros.dao.js'
 //import { getDaoSuscriptores } from '../daos/suscriptores/suscriptores.dao.js'
@@ -19,4 +19,4 @@ export const tiendasService = new TiendasService({ tiendasDao, librosService })
 //const smsService = getSmsService()
 const usersDao = getDaousers()
 const librosDao = getDaoLibros()
-export const usersService = new usersService({ smsService, usersDao, librosDao })
+// No declares usersService nuevamente, ya que ya está importado arriba.

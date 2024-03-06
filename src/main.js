@@ -1,8 +1,6 @@
 import express from 'express'
 import cookieParser from 'cookie-parser'
 import { engine } from 'express-handlebars'
-import { app } from './app/app.js'
-import { PORT } from './config/config.js'
 import { connect } from './database/database.js'
 import { apiRouter } from './routers/api.routers.js'
 import { webRouter } from './routers/web/web.router.js'

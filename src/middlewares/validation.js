@@ -1,4 +1,4 @@
-import { errorMan } from '../daos/utils/errorMan';
+import { errorMan } from '../daos/utils/errorMan.js';
 //hashPass
 export function hashPassword(req, res, next) {
     const { password } = req.body;

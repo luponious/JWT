@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import passport from 'passport'
 
-import { appendJwtAsCookie, removeJwtFromCookies } from '../../middlewares/authentication.js'
+import { appendJwtAsCookie, removeJwtFromCookies } from '../../src/middlewares/authentication.js'
 
 export const sesionesRouter = Router()
 
