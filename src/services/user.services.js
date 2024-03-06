@@ -18,12 +18,6 @@ export class usersService {
     const user = new User(datos);
     await this.usersDao.create(user.toPOJO());
 
-    // Include logic to send SMS notification to admin
-    // await this.smsService.enviar({
-    //   to: ADMIN_SMS_NUMBER,
-    //   message: `nuevo user: ${user.nombre} (${user.email})`
-    // });
-
     return user.toPOJO();
   }
 
@@ -34,7 +28,7 @@ export class usersService {
     const libro = await this.librosDao.readOne({ _id: idLibro });
     if (!libro) throw new Error();
 
-    // Include logic for purchasing books
+    // TODO comprar libro
   }
 
   async darDeBaja(iduser) {

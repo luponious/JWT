@@ -8,7 +8,7 @@ export function hashPassword(req, res, next) {
     const saltRounds = 10; // salt rounds for bcrypt
     bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
         if (err) {
-            return next(err); 
+            return next(err);
         }
         req.hashedPassword = hashedPassword; // guarda hashed pass in the request object
         next(); // Next midd
@@ -32,11 +32,11 @@ export async function validatePremiumUser(req, res, next) {
 
 
 
-export async function validateProductData(req, res, next) {
+export async function validateLibroData(req, res, next) {
     try {
         const {
             title, description,
-            price, code, status, stock,  category,
+            price, code, status, stock, category,
         } = req.body;
 
 

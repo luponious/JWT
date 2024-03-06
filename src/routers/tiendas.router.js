@@ -8,4 +8,4 @@ tiendasRouter.post('/:id/libros', postLibrosController)
 
 //[TO-DO]
 // tiendasRouter.delete('/:idTienda/livros/:idLibro', deleteLibroController)
-// cartsRouter.update('/:idCart/libros/:idProd', updateProdCantController)
+// cartsRouter.update('/:idCart/libros/:idLibr', updateLibroCantController)
