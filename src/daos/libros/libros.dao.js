@@ -7,7 +7,7 @@ import { LibrosDaoFiles } from './libros.dao.files.js'
 import { librosSchema } from './mongoose/libros.model.mongoose.js'
 
 
-const RUTA_USUARIOS_JSON = './db/libros.json'
+const RUTA_userS_JSON = './db/libros.json'
 
 let daoLibros
 
@@ -18,7 +18,7 @@ if (MODO_EJECUCION === 'online') {
     console.log('Libros de: mongodb')
   }
 } else {
-  daoLibros = new LibrosDaoFiles(RUTA_USUARIOS_JSON)
+  daoLibros = new LibrosDaoFiles(RUTA_userS_JSON)
   console.log('Libros existiendo en: sistema de archivos')
 }
 

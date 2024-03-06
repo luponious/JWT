@@ -5,8 +5,8 @@ import {
   
   export async function loginUser(req, res, next) {
     try {
-      const user = await authenticateUser(req.body);
-      if (!user) {
+      const User = await authenticateUser(req.body);
+      if (!User) {
         const error = new Error("Invalid credentials");
         error.code = 401;
         throw error;
@@ -15,7 +15,7 @@ import {
       res.status(201).json({
         status: "success",
         message: "Login successful!",
-        payload: user,
+        payload: User,
       });
     } catch (error) {
       next(error);

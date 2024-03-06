@@ -7,7 +7,7 @@ export const webRouter = Router()
 
 webRouter.get('/', (req, res) => { return res.redirect('/profile') })
 
-// registrar usuario
+// registrar user
 
 webRouter.get('/register', (req, res) => {
   res.render('register.handlebars', {
@@ -15,7 +15,7 @@ webRouter.get('/register', (req, res) => {
   })
 })
 
-// modificar usuario
+// modificar user
 
 webRouter.get('/resetpassword', (req, res) => {
   res.render('resetpassword.handlebars', {
@@ -29,7 +29,7 @@ webRouter.get('/edit', function (req, res) {
   })
 })
 
-// ver usuario
+// ver user
 
 webRouter.get('/profile',
   (req, res) => {

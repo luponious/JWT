@@ -1,10 +1,9 @@
 import passport from 'passport'
-import { UsuariosDaoFiles } from '../daos/usuarios/usuarios.dao.files.js'
-
-// ---------jwt-----------
-
-import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt'
+import { usersDaoFiles } from '../daos/user/users.dao.files.js'
+import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt'
 import { JWT_PRIVATE_KEY } from '../config/config.js'
+import { encriptar } from '../daos/utils/encript.js'
+import { Strategy as LocalStrategy } from 'passport-local'
 
 const COOKIE_OPTS = { signed: true, httpOnly: true, maxAge: 24 * 60 * 60 * 1000 }
 
@@ -23,6 +22,7 @@ export async function removeJwtFromCookies(req, res, next) {
     next()
 }
 
+// JWT Strategy
 passport.use('jwt', new JwtStrategy({
     jwtFromRequest: ExtractJwt.fromExtractors([function (req) {
         let token = null
@@ -33,37 +33,106 @@ passport.use('jwt', new JwtStrategy({
     }]),
     secretOrKey: JWT_PRIVATE_KEY,
 }, function loginUser(user, done) {
-    // console.log(usuario)
     done(null, user)
 }))
 
-//--------local----------
-
-import { Strategy as LocalStrategy } from 'passport-local'
-import { encriptar } from '../daos/utils/encript.js'
-
+// Local Strategy for Registration
 passport.use('local-register', new LocalStrategy({
     passReqToCallback: true,
     usernameField: 'email'
 },
-    async (req, _u, _p, done) => {
+    async (req, email, password, done) => {
         try {
-            const datosUsuario = await Usuario.registrar(req.body)
-            done(null, datosUsuario)
+            // Check if the email already exists
+            const existingUser = await usersDaoFiles.findByEmail(email)
+            if (existingUser) {
+                return done(null, false, { message: 'Email already exists' })
+            }
+            
+            // Create a new user with provided details
+            const newUser = await usersDaoFiles.createUser({ email, password })
+            done(null, newUser)
         } catch (error) {
             done(null, false, error.message)
         }
     }))
 
+// Local Strategy for Login
 passport.use('local-login', new LocalStrategy({
     usernameField: 'email'
 }, async (email, password, done) => {
     try {
-        const datosUsuario = await UsuariosDaoFiles.autenticar(email, password)
-        done(null, datosUsuario)
+        // Find user by email
+        const user = await usersDaoFiles.findByEmail(email)
+        if (!user) {
+            return done(null, false, { message: 'User not found' })
+        }
+
+        // Check if password matches
+        const isValidPassword = await user.isValidPassword(password)
+        if (!isValidPassword) {
+            return done(null, false, { message: 'Incorrect password' })
+        }
+
+        done(null, user)
     } catch (error) {
         return done(null, false, error.message)
     }
 }))
+
+// Custom Strategy for Password Recovery
+passport.use('password-recovery', new JwtStrategy({
+    jwtFromRequest: ExtractJwt.fromUrlQueryParameter('token'),
+    secretOrKey: JWT_PRIVATE_KEY,
+    passReqToCallback: true
+}, async (req, payload, done) => {
+    try {
+        const { userId, newPassword } = req.body; // Assuming you pass userId and newPassword in the request body
+
+        // Implement your password recovery logic here
+        const user = await usersDaoFiles.findById(userId);
+        if (!user) {
+            return done(null, false, { message: 'User not found' });
+        }
+        
+        // Update user's password with the new one
+        user.password = newPassword;
+        await usersDaoFiles.update(user);
+
+        done(null, user);
+    } catch (error) {
+        done(error);
+    }
+}));
+
+// Custom Strategy for Role Change
+passport.use('role-change', new JwtStrategy({
+    jwtFromRequest: ExtractJwt.fromUrlQueryParameter('token'),
+    secretOrKey: JWT_PRIVATE_KEY,
+    passReqToCallback: true
+}, async (req, payload, done) => {
+    try {
+        const { userId, newRole } = req.body; // Assuming you pass userId and newRole in the request body
+
+        // Check if the requesting user is an admin or has appropriate permissions
+        if (!req.user.isAdmin) {
+            return done(null, false, { message: 'Unauthorized: Only admin can change roles' });
+        }
+
+        // Fetch user by userId
+        const user = await usersDaoFiles.findById(userId);
+        if (!user) {
+            return done(null, false, { message: 'User not found' });
+        }
+
+        // Update user's role
+        user.role = newRole;
+        await usersDaoFiles.update(user);
+
+        done(null, user);
+    } catch (error) {
+        done(error);
+    }
+}));
 
 export const autentication = passport.initialize()

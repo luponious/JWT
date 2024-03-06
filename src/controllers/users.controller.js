@@ -1,10 +1,10 @@
-import { usuariosService } from './../services/usuario.services'
+import { usersService } from '../services/user.services'
 
 // Registrar
 export async function postController(req, res, next) {
   try {
-    const usuario = await usuariosService.registrar(req.body)
-    res.result(usuario)
+    const user = await usersService.registrar(req.body)
+    res.result(user)
   } catch (error) {
     next(error)
   }
@@ -13,7 +13,7 @@ export async function postController(req, res, next) {
 // Dar de baja
 export async function deleteController(req, res, next) {
   try {
-    await usuariosService.darDeBaja(req.params.id)
+    await usersService.darDeBaja(req.params.id)
     res.deleted()
   } catch (error) {
     next(error)

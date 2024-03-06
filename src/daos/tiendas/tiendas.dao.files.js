@@ -11,8 +11,8 @@ export class TiendasDaoFiles {
         return JSON.parse(await fs.readFile(this.path, 'utf-8'))
     }
 
-    async #writeFile(usuarios) {
-        await fs.writeFile(this.path, JSON.stringify(usuarios, null, 2))
+    async #writeFile(users) {
+        await fs.writeFile(this.path, JSON.stringify(users, null, 2))
     }
 
     async create(tiendaPojo) {

@@ -10,7 +10,7 @@ import {
   updateLibroCartController,
 } from "../controllers/cart.controller.js";
 import passport from "passport";
-import { solo } from "../middlewares/authorization.js";
+import { tieneRol } from "../middlewares/authorization.js";
 
 export const cartsRouter = Router();
 
@@ -26,7 +26,7 @@ cartsRouter.post("/", postCartController);
 cartsRouter.post(
   "/:id/libro/:pid",
   passport.authenticate("jwt", { failWithError: true, session: false }),
-  solo(["user", "admin"]),
+  tieneRol(["user", "admin"]),
   validateId,
   addLibroToCartController
 );

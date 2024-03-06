@@ -1,8 +1,8 @@
 import { getDaoTiendas } from '../daos/tiendas/tiendas.dao.js'
 import { librosService } from './libros.service.js'
 import { TiendasService } from './tiendas.service.js'
-import { UsuariosService } from './usuarios.service.js'
-import { getDaoUsuarios } from '../daos/usuarios/usuarios.dao.js'
+import { usersService } from './users.service.js'
+import { getDaousers } from '../daos/user/users.dao.js'
 import { getDaoLibros } from '../daos/libros/libros.dao.js'
 //import { getDaoSuscriptores } from '../daos/suscriptores/suscriptores.dao.js'
 //import { getEmailService } from './email/email.service.js'
@@ -17,6 +17,6 @@ export const tiendasService = new TiendasService({ tiendasDao, librosService })
 //export const newslettersService = new NewslettersService({ suscriptoresDao, emailService })
 
 //const smsService = getSmsService()
-const usuariosDao = getDaoUsuarios()
+const usersDao = getDaousers()
 const librosDao = getDaoLibros()
-export const usuariosService = new UsuariosService({ smsService, usuariosDao, librosDao })
+export const usersService = new usersService({ smsService, usersDao, librosDao })

@@ -1,4 +1,36 @@
 import { errorMan } from '../daos/utils/errorMan';
+//hashPass
+export function hashPassword(req, res, next) {
+    const { password } = req.body;
+    if (!password) {
+        return res.status(400).json({ error: 'Password is required' });
+    }
+    const saltRounds = 10; // salt rounds for bcrypt
+    bcrypt.hash(password, saltRounds, (err, hashedPassword) => {
+        if (err) {
+            return next(err); 
+        }
+        req.hashedPassword = hashedPassword; // guarda hashed pass in the request object
+        next(); // Next midd
+    });
+}
+//validadetePremium
+export async function validatePremiumUser(req, res, next) {
+    try {
+        // Assuming you have a property in req.user indicating the user's role
+        const userRole = req.user.role;
+
+        if (userRole !== 'premium') {
+            return res.status(403).json({ error: 'Unauthorized: Only premium users can access this functionality' });
+        }
+
+        next();
+    } catch (error) {
+        next(error);
+    }
+}
+
+
 
 export async function validateProductData(req, res, next) {
     try {

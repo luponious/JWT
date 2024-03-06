@@ -6,14 +6,14 @@ import {
 import {
     validateLibrosData,    validateId,    validateUpdates,
 } from "../middlewares/validation.js";
-import { solo } from "../middlewares/authorization.js";
+import { tieneRol } from "../middlewares/authorization.js";
 import passport from "passport";
 
 export const librosRouter = Router();
 
 // Define middleware functions
 const authenticateJWT = passport.authenticate("jwt", { failWithError: true, session: false });
-const adminAuthorization = solo(["admin"]);
+const adminAuthorization = tieneRol(["admin"]);
 
 // GET
 librosRouter.get("/", getLibrosController);
